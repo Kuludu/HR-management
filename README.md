@@ -1,10 +1,10 @@
-Kuludu人事管理系统
+Kuludu���¹���ϵͳ
 ==================
-安装说明
+��װ˵��
 --------
--请将程序上传至站点，并运行install.php 
--请注意赋予文件可执行权限！
--如果在安装过程中遇到任何问题，可以通过邮件与我联系。
+-�뽫�����ϴ���վ�㣬������install.php 
+-��ע�⸳���ļ���ִ��Ȩ�ޣ�
+-����ڰ�װ�����������κ����⣬����ͨ���ʼ�������ϵ��
 *******
-程序版本V0.1BETA
-作者Kuludu，邮箱me@kuludu.net
+����汾V0.1BETA
+����Kuludu������me@kuludu.net
