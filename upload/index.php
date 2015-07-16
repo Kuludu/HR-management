@@ -3,12 +3,13 @@
 <head>
 <meta charset="utf-8">
 <?php
-include './setting.php';
+$path = dirname(__FILE__);
+include $path.'\setting.php';
 //error_reporting(0);
 if(OGNAME != null){
-echo '<title>'.OGNAME.'人事管理</title>';
+    echo '<title>'.OGNAME.'人事管理</title>';
 }else{
-    echo '请执行安装/修复程序';
+    echo '<center>请执行安装/修复程序</center>';
 }
 ?>
 </head>
@@ -17,10 +18,11 @@ echo '<title>'.OGNAME.'人事管理</title>';
 <?php
 $link = mysql_connect(DB,UNAME,PWD);
 if($link){
-    $db_selected = mysql_query(DB_NAME,$link);
+    $db_selected = mysql_select_db(DB_NAME,$link);
     if(!$db_selected){
-        die('出现错误，错误代码:R02');
+        die('<center>出现错误，错误代码:R02</center>'.mysql_error());
     }
+    /*
     $ch = curl_init();
     $vistorip = $_SERVER["REMOTE_ADDR"];
     $url = 'http://apis.baidu.com/apistore/iplookupservice/iplookup?ip='.$vistorip;
@@ -30,8 +32,9 @@ if($link){
     curl_setopt($ch , CURLOPT_URL , $url);
     $res = curl_exec($ch);
     var_dump(json_decode($res));
+     */
 }else{
-    die("出现错误，错误代码:R01");
+    die("<center>出现错误，错误代码:R01</center>");
 }
 ?>
 </body>

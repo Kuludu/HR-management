@@ -4,12 +4,12 @@
 <meta charset="utf-8">7
 <?php
 //error_reporting(0);
-include './setting.php';
-//error_reporting(0);
+$path = dirname(__FILE__);
+include $path.'\setting.php';
 if(OGNAME != null){
 echo '<title>'.OGNAME.'人事管理</title>';
 }else{
-    echo '请执行安装/修复程序';
+    echo '<center>请执行安装/修复程序</center>';
 }
 ?>
 </head>
@@ -19,7 +19,7 @@ $link = mysql_connect(DB,UNAME,PWD);
 if($link){
     //read
 }else{
-    die("出现错误，错误代码：A01");
+    die("<center>出现错误，错误代码：A01</center>");
 }
 ?>
 </body>
