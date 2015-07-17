@@ -21,6 +21,7 @@ if($link){
 }else{
     die("<center>出现错误，错误代码：A01</center>");
 }
+mysql_close();
 ?>
 </body>
 </html>

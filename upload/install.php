@@ -9,6 +9,7 @@
 <center><h4>第一步，请输入一下信息（如不清楚，请咨询您的主机提供商）</h4></center>
 <form action="install.php" method="post" name="install">
 <center>团体名称:<input type="text" name="ogname" size="50"></input></center>
+<center>管理员账户:<input type="text" name="admin" size="50" value="admin"></input></center>
 <center>数据库地址:<input type="text" name="db" size="50" value="localhost"></input></center>
 <center>数据库名:<input type="text" name="db_name" size="50"></input></center>
 <center>数据库用户名:<input type="text" name="uname" size="50"></input></center>
@@ -17,17 +18,18 @@
 <center><input type="submit" value="提交"></input></center>
 </form>
 <?php
-//error_reporting(0);
+error_reporting(0);
   /*信息初始化*/
-if(isset($_POST["db"])&&isset($_POST["db_name"])&&isset($_POST["uname"])&&isset($_POST["pwd"])&&isset($_POST["table_prefix"])){
-	if(file_exists("setting.php")) {
+if(isset($_POST["db"])&&isset($_POST["db_name"])&&isset($_POST["uname"])&&isset($_POST["pwd"])&&isset($_POST["table_prefix"])&&isset($_POST["ogname"])&&isset($_POST["admin"])){
+if(file_exists("setting.php")) {
     echo "<center>修复中</center>";
-	unlink("setting.php")or die("<center>出现错误，错误代码：I05</center>");
+    unlink("setting.php")or die("<center>出现错误，错误代码：I05</center>");
 } else {
     echo "<center>安装中</center>";
 }
   /*检查信息*/
 $rec_ogname = htmlspecialchars($_POST["ogname"]);
+$rec_admin = htmlspecialchars($_POST["admin"]);
 $rec_db = htmlspecialchars($_POST["db"]);
 $rec_db_name = htmlspecialchars($_POST["db_name"]);
 $rec_uname = htmlspecialchars($_POST["uname"]);
@@ -42,10 +44,11 @@ $num=mt_rand(0,$len);
 $safe_code .= $str[$num];
 }
  /*写入文件*/
-$file = '<?php define("OGNAME","'.$rec_ogname.'"); define("DB","'.$rec_db.'"); define("DB_NAME","'.$rec_db_name.'"); define("UNAME","'.$rec_uname.'"); define("PWD","'.$rec_pwd.'"); define("TABLE_PREFIX","'.$rec_table_prefix.'"); define("SAFE_CODE","'.$safe_code.'"); ?>';
+$file = '<?php define("OGNAME","'.$rec_ogname.'"); define("ADMIN","'.$rec_admin.'"); define("DB","'.$rec_db.'"); define("DB_NAME","'.$rec_db_name.'"); define("UNAME","'.$rec_uname.'"); define("PWD","'.$rec_pwd.'"); define("TABLE_PREFIX","'.$rec_table_prefix.'"); define("SAFE_CODE","'.$safe_code.'"); ?>';
 $f_open = fopen("setting.php","w");
 fwrite($f_open,$file);
 fclose($f_open);
+echo "<center>您的安全代码是：".$safe_code."</center>";
    /*数据库始化*/
 $path = dirname(__FILE__);
 echo '<center>安装目录：'.$path.'</center>';
@@ -58,15 +61,16 @@ if($link){
               . "                                                                    `name` varchar(255) DEFAULT NULL,"
               . "                                                                    `ips` varchar(255) DEFAULT NULL)ENGINE=MyISAM DEFAULT CHARSET=utf8;")or die("<center>出现错误，错误代码:I03</center>".  mysql_error());
       mysql_db_query(DB_NAME, "CREATE TABLE IF NOT EXISTS ".TABLE_PREFIX."_questions(`id` int(10) DEFAULT NULL,"
-              . "                                                                    `type` int(1) DEAFULT NULL,"
+              . "                                                                    `type` int(1) DEFAULT NULL,"
               . "                                                                    `question` varchar(255) DEFAULT NULL)ENGINE=MyISAM DEFAULT CHARSET=utf8;")or die("<center>出现错误，错误代码:I03</center>".  mysql_error());
-      mysql_db_query(DB_NAME, "INSERT INTO ".TABLE_PREFIX.'_questions("id","type","question") VALUES("默认问题","1","Not Ready Yet")')or die("<center>出现错误，错误代码:I06</center>");
+      mysql_db_query(DB_NAME, "INSERT INTO ".TABLE_PREFIX.'_questions(`id`,`type`,`question`) VALUES(1,1,"Not Ready Yet")')or die("<center>出现错误，错误代码:I06</center>");
   }  else {
       die("<center>出现错误，错误代码:I02</center>");
   }
 } else {
     die("<center>出现错误，错误代码:I01</center>");
 }
+mysql_close();
 echo "<center>程序完成</center>";
 unlink("install.php")or die("<center>出现错误，错误代码：I04</center>");
 }
