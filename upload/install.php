@@ -57,18 +57,19 @@ $link = mysql_connect(DB,UNAME,PWD);
 if($link){
   $db_selected = mysql_select_db(DB_NAME,$link);
   if($db_selected){
-      mysql_db_query(DB_NAME, "CREATE TABLE IF NOT EXISTS ".TABLE_PREFIX."_applicant(`id` int(10) DEFAULT NULL,"
+      mysql_query("DROP TABLE IF EXISTS ".TABLE_PREFIX."_applicate ".TABLE_PREFIX."_questions");
+      mysql_query("CREATE TABLE IF NOT EXISTS ".TABLE_PREFIX."_applicant(`id` int(10) DEFAULT NULL,"
               . "                                                                    `name` varchar(255) DEFAULT NULL,"
               . "                                                                    `ips` varchar(255) DEFAULT NULL)ENGINE=MyISAM DEFAULT CHARSET=utf8;")or die("<center>出现错误，错误代码:I03</center>".  mysql_error());
-      mysql_db_query(DB_NAME, "CREATE TABLE IF NOT EXISTS ".TABLE_PREFIX."_questions(`id` int(10) DEFAULT NULL,"
+      mysql_query("CREATE TABLE IF NOT EXISTS ".TABLE_PREFIX."_questions(`id` int(10) DEFAULT NULL,"
               . "                                                                    `type` int(1) DEFAULT NULL,"
               . "                                                                    `question` varchar(255) DEFAULT NULL)ENGINE=MyISAM DEFAULT CHARSET=utf8;")or die("<center>出现错误，错误代码:I03</center>".  mysql_error());
-      mysql_db_query(DB_NAME, "INSERT INTO ".TABLE_PREFIX.'_questions(`id`,`type`,`question`) VALUES(1,1,"Not Ready Yet")')or die("<center>出现错误，错误代码:I06</center>");
+      mysql_query("INSERT INTO ".TABLE_PREFIX.'_questions(`id`,`type`,`question`) VALUES(1,1,"Not Ready Yet")')or die("<center>出现错误，错误代码:I06</center>");
   }  else {
       die("<center>出现错误，错误代码:I02</center>");
   }
 } else {
-    die("<center>出现错误，错误代码:I01</center>");
+      die("<center>出现错误，错误代码:I01</center>");
 }
 mysql_close();
 echo "<center>程序完成</center>";
