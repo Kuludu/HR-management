@@ -44,7 +44,7 @@ $num=mt_rand(0,$len);
 $safe_code .= $str[$num];
 }
  /*写入文件*/
-$file = '<?php define("OGNAME","'.$rec_ogname.'"); define("ADMIN","'.$rec_admin.'"); define("DB","'.$rec_db.'"); define("DB_NAME","'.$rec_db_name.'"); define("UNAME","'.$rec_uname.'"); define("PWD","'.$rec_pwd.'"); define("TABLE_PREFIX","'.$rec_table_prefix.'"); define("SAFE_CODE","'.$safe_code.'"); ?>';
+$file = '<?php define("OGNAME","'.$rec_ogname.'"); define("DB","'.$rec_db.'"); define("DB_NAME","'.$rec_db_name.'"); define("UNAME","'.$rec_uname.'"); define("PWD","'.$rec_pwd.'"); define("TABLE_PREFIX","'.$rec_table_prefix.'"); ?>';
 $f_open = fopen("setting.php","w");
 fwrite($f_open,$file);
 fclose($f_open);
@@ -57,14 +57,22 @@ $link = mysql_connect(DB,UNAME,PWD);
 if($link){
   $db_selected = mysql_select_db(DB_NAME,$link);
   if($db_selected){
-      mysql_query("DROP TABLE IF EXISTS ".TABLE_PREFIX."_applicate ".TABLE_PREFIX."_questions");
+      mysql_query("DROP TABLE IF EXISTS ".TABLE_PREFIX."_applicant,".TABLE_PREFIX."_questions,".TABLE_PREFIX."_setting,".TABLE_PREFIX."_members");
       mysql_query("CREATE TABLE IF NOT EXISTS ".TABLE_PREFIX."_applicant(`id` int(10) DEFAULT NULL,"
               . "                                                                    `name` varchar(255) DEFAULT NULL,"
-              . "                                                                    `ips` varchar(255) DEFAULT NULL)ENGINE=MyISAM DEFAULT CHARSET=utf8;")or die("<center>出现错误，错误代码:I03</center>".  mysql_error());
+              . "                                                                    `ips` varchar(255) DEFAULT NULL"
+              . "                                                                    `pass` varchar(255) DEFAULT NULL)ENGINE=MyISAM DEFAULT CHARSET=utf8;")or die("<center>出现错误，错误代码:I03</center>".  mysql_error());
       mysql_query("CREATE TABLE IF NOT EXISTS ".TABLE_PREFIX."_questions(`id` int(10) DEFAULT NULL,"
               . "                                                                    `type` int(1) DEFAULT NULL,"
               . "                                                                    `question` varchar(255) DEFAULT NULL)ENGINE=MyISAM DEFAULT CHARSET=utf8;")or die("<center>出现错误，错误代码:I03</center>".  mysql_error());
+      mysql_query("CREATE TABLE IF NOT EXISTS ".TABLE_PREFIX."_members(`id` int(10) DEFAULT NULL,"
+              . "                                                                    `access_level` int(1) DEFAULT NULL,"
+              . "                                                                    `pwd` varchar(255) DEFAULT NULL)ENGINE=MyISAM DEFAULT CHARSET=utf8;")or die("<center>出现错误，错误代码:I03</center>".  mysql_error());
+      mysql_query("CREATE TABLE IF NOT EXISTS ".TABLE_PREFIX."_setting(`safe_code` varchar(64) DEFAULT NULL,"
+              . "                                                                    `admin` varchar(255) DEFAULT NULL,"
+              . "                                                                    `admin_last_login` varchar(255) DEFAULT NULL)ENGINE=MyISAM DEFAULT CHARSET=utf8;")or die("<center>出现错误，错误代码:I03</center>".  mysql_error());
       mysql_query("INSERT INTO ".TABLE_PREFIX.'_questions(`id`,`type`,`question`) VALUES(1,1,"Not Ready Yet")')or die("<center>出现错误，错误代码:I06</center>");
+      mysql_query("INSERT INTO ".TABLE_PREFIX.'_setting(`safe_code`,`admin`) VALUES("'.$safe_code.'","'.$rec_admin.'")')or die("<center>出现错误，错误代码:I06</center>");
   }  else {
       die("<center>出现错误，错误代码:I02</center>");
   }
@@ -72,6 +80,14 @@ if($link){
       die("<center>出现错误，错误代码:I01</center>");
 }
 mysql_close();
+ /* 创建申请文件夹 */
+if(!file_exists("applicant")){
+    echo "<center>申请目录未创建</center>";
+    $result = mkdir("applicant");
+    if(!$result){
+        die("出现错误，错误代码:I07");
+    }
+}
 echo "<center>程序完成</center>";
 unlink("install.php")or die("<center>出现错误，错误代码：I04</center>");
 }
