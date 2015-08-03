@@ -14,7 +14,7 @@
 <center>数据库名:<input type="text" name="db_name" size="50"></input></center>
 <center>数据库用户名:<input type="text" name="uname" size="50"></input></center>
 <center>数据库密码:<input type="password" name="pwd" size="50"></input></center>
-<center>数据库表前缀（需安装多个管理系统请修改）:<input type="text" name="table_prefix" size="10" value="pm_"></input></center>
+<center>数据库表前缀（需安装多个管理系统请修改）:<input type="text" name="table_prefix" size="10" value="pm"></input></center>
 <center><input type="submit" value="提交"></input></center>
 </form>
 <?php
@@ -37,10 +37,10 @@ $rec_pwd = htmlspecialchars($_POST["pwd"]);
 $rec_table_prefix = htmlspecialchars($_POST["table_prefix"]);
  /*生成安全代码*/
 $str = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-$len = strlen($str)-1;
+$len = strlen($str);
 $safe_code = '';
 for($i=0;$i<64;$i++){
-$num=mt_rand(0,$len);
+$num=mt_rand(0,$len)-1;
 $safe_code .= $str[$num];
 }
  /*写入文件*/
@@ -60,13 +60,14 @@ if($link){
       mysql_query("DROP TABLE IF EXISTS ".TABLE_PREFIX."_applicant,".TABLE_PREFIX."_questions,".TABLE_PREFIX."_setting,".TABLE_PREFIX."_members");
       mysql_query("CREATE TABLE IF NOT EXISTS ".TABLE_PREFIX."_applicant(`id` int(10) DEFAULT NULL,"
               . "                                                                    `name` varchar(255) DEFAULT NULL,"
-              . "                                                                    `ips` varchar(255) DEFAULT NULL"
+              . "                                                                    `ips` varchar(255) DEFAULT NULL,"
               . "                                                                    `pass` varchar(255) DEFAULT NULL)ENGINE=MyISAM DEFAULT CHARSET=utf8;")or die("<center>出现错误，错误代码:I03</center>".  mysql_error());
       mysql_query("CREATE TABLE IF NOT EXISTS ".TABLE_PREFIX."_questions(`id` int(10) DEFAULT NULL,"
               . "                                                                    `type` int(1) DEFAULT NULL,"
               . "                                                                    `question` varchar(255) DEFAULT NULL)ENGINE=MyISAM DEFAULT CHARSET=utf8;")or die("<center>出现错误，错误代码:I03</center>".  mysql_error());
       mysql_query("CREATE TABLE IF NOT EXISTS ".TABLE_PREFIX."_members(`id` int(10) DEFAULT NULL,"
               . "                                                                    `access_level` int(1) DEFAULT NULL,"
+              . "                                                                    `uname` varchar(255) DEFAULT NULL,"
               . "                                                                    `pwd` varchar(255) DEFAULT NULL)ENGINE=MyISAM DEFAULT CHARSET=utf8;")or die("<center>出现错误，错误代码:I03</center>".  mysql_error());
       mysql_query("CREATE TABLE IF NOT EXISTS ".TABLE_PREFIX."_setting(`safe_code` varchar(64) DEFAULT NULL,"
               . "                                                                    `admin` varchar(255) DEFAULT NULL,"
@@ -88,7 +89,12 @@ if(!file_exists("applicant")){
         die("出现错误，错误代码:I07");
     }
 }
+$htaccess = "Deny from all";
+$f_open = fopen($path."/applicant/.htaccess","w");
+fwrite($f_open,$htaccess);
+fclose($f_open);
 echo "<center>程序完成</center>";
+echo "<center>温馨提示，本页面已经自动删除</center>";
 unlink("install.php")or die("<center>出现错误，错误代码：I04</center>");
 }
 ?>
