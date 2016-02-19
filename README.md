@@ -5,7 +5,10 @@ Kuludu人事管理系统
 * 不用解释，这是一个用作团队管理的程序，集成审核功能。
 * 请将程序上传至站点，并运行install.php。
 * 请注意赋予目录可执行读写权限！
-* 建议开启.htaccess
+* 建议开启.htaccess(不开后果自负)
 * 如果在安装过程中遇到任何问题，可以通过邮件与我联系。
-* [程序帮助页面](https://www.kuludu.net/HRM/help.html),也可查看上面的help.html。
+* [~~程序帮助页面~~](https://www.kuludu.net/HRM/help.html)(左边的地址已爆炸),也可查看上面的help.html。
 * 程序版本V0.3DEV 作者Kuludu 联系邮箱me@kuludu.net。
+--------
+已经几个月没更新了，我觉得还能抢救一下
+于是我在这里说了几句废话
